@@ -4,14 +4,24 @@ export function starandOptions(options) {
 }
 
 export function report(data) {
-  console.log(data)
+  if (!navigator.sendBeacon) { // 如果支持 sendBeacon
+    navigator.sendBeacon(`http://127.0.0.1:8889?params=${encodeURIComponent(data)}`)
+  } else { // 不支持的使用img上报
+    const imgDom = new Image
+    imgDom.src = `http://127.0.0.1:8889?params=${encodeURIComponent(data)}`
+    document.body.appendChild(imgDom)
+    setTimeout(() => {
+      document.body.removeChild(imgDom)
+    }, 100)
+  }
 }
 
 const caches = []
 export function lazyReport(data, flag) {
   const len = caches.length
   if (len > 10) {
-    report(JSON.stringify(caches))
+    const params = caches.splice()
+    report(JSON.stringify(params))
   } else {
     caches.push(data)
   }

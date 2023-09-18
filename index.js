@@ -1,6 +1,8 @@
 import { starandOptions } from './utils/utils.js'
 import MonitorError from './monitor/error.js'
 import MonitorBehavior from './monitor/behavior.js'
+import MonitorPv from './monitor/pv.js'
+import { report, lazyReport } from './utils/utils.js'
 export default class Monitor {
   /***
    * options
@@ -13,6 +15,10 @@ export default class Monitor {
    * }
    */
   constructor(options) {
+    this.data = {
+      appid: options.appid,
+      userid: options.userid
+    }
     // 1. 获取初始化参数
     const opts =this.options = starandOptions(options)
     // 2. 根据参数， 初始化监控类型： 错误监控、行为监控、PV、UV
@@ -33,20 +39,14 @@ export default class Monitor {
     }
   }
 
-  report(type, data) {
-    if (type === 'error') {
-      this.errorIns && this.errorIns.report(data)
-    } else if (type === 'behavior') {
-      this.behaviorIns && this.behaviorIns.report(data)
-    }
+  report(data) {
+    // 缺少处理数据的功能
+    report(JSON.stringify(Object.assign(this.data, data)))
   }
 
-  lazyReport(type, data) {
-    if (type === 'error') {
-      this.errorIns && this.errorIns.lazyReport(data)
-    } else if (type === 'behavior') {
-      this.behaviorIns && this.behaviorIns.lazyReport(data)
-    }
+  lazyReport(data) {
+    // 缺少处理数据的功能
+    lazyReport(Object.assign(this.data, data))
   }
 
 }

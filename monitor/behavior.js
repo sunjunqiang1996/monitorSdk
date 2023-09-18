@@ -39,6 +39,7 @@ export default class MonitorBehavior {
   }
 
   report(data) {
+    console.log('wwwwwwwww2');
     const params = Object.assign(this.data, data)
     report(JSON.stringify(params))
   }
